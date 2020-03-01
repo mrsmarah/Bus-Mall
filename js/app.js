@@ -40,15 +40,17 @@ function Stuff(name) {
     this.views = 0;
 
 }
-
+var leftImageRandom;
+var midImageRandom;
+var rightImageRandom;
 function pickRandomStuff() {
-    var leftImageRandom = stuff[randomNumber(0, stuff.length-1)];
-    var midImageRandom = stuff[randomNumber(0, stuff.length-1)];
-    var rightImageRandom = stuff[randomNumber(0, stuff.length-1)];
+     leftImageRandom = stuff[randomNumber(0, stuff.length-1)];
+     midImageRandom = stuff[randomNumber(0, stuff.length-1)];
+     rightImageRandom = stuff[randomNumber(0, stuff.length-1)];
     while (leftImageRandom === midImageRandom || leftImageRandom === rightImageRandom || midImageRandom === rightImageRandom) {
-        var leftImageRandom = stuff[randomNumber(0, stuff.length-1)];
-        var midImageRandom = stuff[randomNumber(0, stuff.length-1)];
-        var rightImageRandom = stuff[randomNumber(0, stuff.length-1)];
+        leftImageRandom = stuff[randomNumber(0, stuff.length-1)];
+        midImageRandom = stuff[randomNumber(0, stuff.length-1)];
+        rightImageRandom = stuff[randomNumber(0, stuff.length-1)];
 }
     leftImage.setAttribute('src', leftImageRandom.urlImage);
     leftImage.setAttribute('alt', leftImageRandom.name);
@@ -65,19 +67,44 @@ for (var i = 0; i < stuffImages.length; i++) {
 pickRandomStuff();
 console.log(stuff);
 
+groupImageSection.addEventListener('click', clickImage);
+
 function clickImage(e){
-    if (e.target.id === 'left-img' || e.target.id === 'mid-img' || e.target.id === 'right-img') {
+            if (e.target.id === 'left-img') {
+                leftImageRandom.clicks++; 
+            }
+            else if (e.target.id === 'mid-img'){
+                midImageRandom.clicks++;
+            }
+            else if (e.target.id === 'right-img'){
+                rightImageRandom.clicks++;
+            }
+   
+   
+        if (totalClicks < 26){
         pickRandomStuff();
         totalClicks++;
+        rightImageRandom.views++;
+        midImageRandom.views++;
+        leftImageRandom.views++;
     }
+
+
     if (totalClicks === 26) {
         groupImageSection.removeEventListener('click', clickImage);
         // leftImage.remove();
         // midImage.remove();
         // rightImage.remove();
         console.log('finished');
+        renderList();
     }
-    if 
-
 }
-groupImageSection.addEventListener('click', clickImage);
+
+function renderList() {
+    var ulE1 = document.getElementById('list');
+    for (var i =0; i < stuff.length ; i++) {
+      var liE1 = document.createElement('li');
+      liE1.textContent = `${stuff[i].name} has ${stuff[i].clicks} clicks and ${stuff[i].views} views`;
+      ulE1.appendChild(liE1);
+    }
+  }
