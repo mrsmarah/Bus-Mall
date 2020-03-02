@@ -49,25 +49,29 @@ function pickRandomStuff() {
      midImageRandom = stuff[randomNumber(0, stuff.length-1)];
      rightImageRandom = stuff[randomNumber(0, stuff.length-1)];
 
-
-
     while (leftImageRandom === midImageRandom || leftImageRandom === rightImageRandom || midImageRandom === rightImageRandom) {
         leftImageRandom = stuff[randomNumber(0, stuff.length-1)];
         midImageRandom = stuff[randomNumber(0, stuff.length-1)];
         rightImageRandom = stuff[randomNumber(0, stuff.length-1)];
 }
+
     leftImage.setAttribute('src', leftImageRandom.urlImage);
     leftImage.setAttribute('alt', leftImageRandom.name);
     midImage.setAttribute('src', midImageRandom.urlImage);
     midImage.setAttribute('alt', midImageRandom.name);
     rightImage.setAttribute('src', rightImageRandom.urlImage);
     rightImage.setAttribute('alt', rightImageRandom.name);  
+    
 }
 
 for (var i = 0; i < stuffImages.length; i++) {
     new Stuff(stuffImages[i]);
+   
 }
 pickRandomStuff();
+leftImageRandom.views = 1;
+midImageRandom.views = 1;
+rightImageRandom.views = 1;
 
 console.log(stuff);
 
@@ -84,11 +88,26 @@ function clickImage(e){
         else if (e.target.id === 'right-img'){
             rightImageRandom.clicks++;
         }
-   
+
+
+    var A = leftImageRandom;
+    var B = midImageRandom;
+    var C = rightImageRandom;
 
     if (totalClicks < 26){
-        
-    pickRandomStuff();
+        pickRandomStuff()
+            while(  leftImageRandom === A ||
+                    leftImageRandom === B ||
+                    leftImageRandom === C ||
+                    rightImageRandom === A ||
+                    rightImageRandom === B ||
+                    rightImageRandom === C ||
+                    midImageRandom === A ||
+                    midImageRandom === B ||
+                    midImageRandom === C ) {
+                        console.log("hi");
+                    pickRandomStuff();    
+                }
     leftImageRandom.views++;
     midImageRandom.views++;
     rightImageRandom.views++;
@@ -97,10 +116,12 @@ function clickImage(e){
     }
     if (totalClicks === 26) {
         groupImageSection.removeEventListener('click', clickImage);
-        console.log('finished');
         renderList();
+        renderChartResults();
+        console.log('finished');
     }
 }
+
 
 function renderList() {
     var ulE1 = document.getElementById('list');
@@ -110,3 +131,52 @@ function renderList() {
       ulE1.appendChild(liE1);
     }
   }
+
+  function renderChartResults(){
+    var chartLabels = [];
+    var chartDataClicks = [];
+    var chatDataViews = [];
+    for(var i = 0 ; i < stuff.length ; i++){
+      var stuffName = stuff[i].name;
+      chartLabels.push(stuffName);
+      var stuffClicks = stuff[i].clicks;
+      chartDataClicks.push(stuffClicks);
+      var stuffViews = stuff[i].views;
+      chatDataViews.push(stuffViews);
+      
+    }
+    var ctx = document.getElementById('myStuff').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: chartLabels,
+          datasets: [{
+            label: '# of Clicks',
+            fillColor: "blue",
+            data: chartDataClicks,
+            backgroundColor: 'rgba(255, 99, 132, 1)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+          },
+          {
+            label: '# of Views',
+            fillColor: "red",
+            data: chatDataViews,
+            backgroundColor:'rgba(54, 162, 235, 1)',    
+            borderColor:'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+          }
+        ]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
+      });
+    }
+
