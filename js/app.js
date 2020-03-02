@@ -49,9 +49,7 @@ function pickRandomStuff() {
      midImageRandom = stuff[randomNumber(0, stuff.length-1)];
      rightImageRandom = stuff[randomNumber(0, stuff.length-1)];
 
-    rightImageRandom.views++;
-    midImageRandom.views++;
-    leftImageRandom.views++;
+
 
     while (leftImageRandom === midImageRandom || leftImageRandom === rightImageRandom || midImageRandom === rightImageRandom) {
         leftImageRandom = stuff[randomNumber(0, stuff.length-1)];
@@ -70,6 +68,7 @@ for (var i = 0; i < stuffImages.length; i++) {
     new Stuff(stuffImages[i]);
 }
 pickRandomStuff();
+
 console.log(stuff);
 
 
@@ -88,7 +87,11 @@ function clickImage(e){
    
 
     if (totalClicks < 26){
+        
     pickRandomStuff();
+    leftImageRandom.views++;
+    midImageRandom.views++;
+    rightImageRandom.views++;
     totalClicks++;
     
     }
