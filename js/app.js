@@ -30,7 +30,7 @@ var midImage = document.querySelector('#mid-img');
 var rightImage = document.querySelector('#right-img');
 var groupImageSection = document.getElementById('all-stuff');
 var stuff = [];
-totalClicks = 1;
+totalClicks = 0;
 
 function Stuff(name) {
     this.name = name.split(".")[0];
@@ -94,8 +94,8 @@ function clickImage(e){
     var B = midImageRandom;
     var C = rightImageRandom;
 
-    if (totalClicks < 26){
-        pickRandomStuff()
+    if (totalClicks < 25){
+        pickRandomStuff();
             while(  leftImageRandom === A ||
                     leftImageRandom === B ||
                     leftImageRandom === C ||
@@ -105,21 +105,26 @@ function clickImage(e){
                     midImageRandom === A ||
                     midImageRandom === B ||
                     midImageRandom === C ) {
-                        console.log("hi");
+                        // console.log("hi");
                     pickRandomStuff();    
                 }
     leftImageRandom.views++;
     midImageRandom.views++;
     rightImageRandom.views++;
     totalClicks++;
-    
     }
-    if (totalClicks === 26) {
+    // console.log(rightImageRandom.views);
+
+    if (totalClicks === 25) {
         groupImageSection.removeEventListener('click', clickImage);
+        leftImageRandom.views--;
+        midImageRandom.views--;
+        rightImageRandom.views--;
         renderList();
         renderChartResults();
-        console.log('finished');
+        // console.log('finished');
     }
+    // console.log(rightImageRandom.views);
 }
 
 
@@ -179,4 +184,3 @@ function renderList() {
         }
       });
     }
-
