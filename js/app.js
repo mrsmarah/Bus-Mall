@@ -1,3 +1,5 @@
+'use strict';
+
 function randomNumber(min,max) {
     return Math.floor(Math.random() * (max -min + 1)) + min;
 }
@@ -30,7 +32,7 @@ var midImage = document.querySelector('#mid-img');
 var rightImage = document.querySelector('#right-img');
 var groupImageSection = document.getElementById('all-stuff');
 var stuff = [];
-totalClicks = 0;
+var totalClicks = 0;
 
 function Stuff(name) {
     this.name = name.split(".")[0];
@@ -38,7 +40,6 @@ function Stuff(name) {
     stuff.push(this);
     this.clicks = 0;
     this.views = 0;
-
 }
 var leftImageRandom;
 var midImageRandom;
@@ -66,18 +67,27 @@ function pickRandomStuff() {
 
 for (var i = 0; i < stuffImages.length; i++) {
     new Stuff(stuffImages[i]);
-   
 }
 pickRandomStuff();
 leftImageRandom.views = 1;
 midImageRandom.views = 1;
 rightImageRandom.views = 1;
 
-console.log(stuff);
+// console.log(stuff);
 
+function setItem(){
+  var order = JSON.stringify(stuff);
+  localStorage.setItem('imageOrder', order);
+}
+function getItem(){
+      var imageOrder = localStorage.getItem('imageOrder');
+      stuff = JSON.parse(imageOrder);
+      renderList();
+      renderChartResults();
+    }
 
+groupImageSection.addEventListener('click', clickImage)
 
-groupImageSection.addEventListener('click', clickImage);
 function clickImage(e){
         if (e.target.id === 'left-img') {
             leftImageRandom.clicks++; 
@@ -112,6 +122,7 @@ function clickImage(e){
     midImageRandom.views++;
     rightImageRandom.views++;
     totalClicks++;
+    setItem();
     }
     // console.log(rightImageRandom.views);
 
@@ -122,21 +133,23 @@ function clickImage(e){
         rightImageRandom.views--;
         renderList();
         renderChartResults();
-        // console.log('finished');
+        // console.log('finished');  
     }
     // console.log(rightImageRandom.views);
 }
+getItem();
 
+function renderList(){
 
-function renderList() {
     var ulE1 = document.getElementById('list');
+    list.textContent = "";
+
     for (var i =0; i < stuff.length ; i++) {
       var liE1 = document.createElement('li');
       liE1.textContent = `${stuff[i].name} has ${stuff[i].clicks} clicks and ${stuff[i].views} views`;
-      ulE1.appendChild(liE1);
+      ulE1.appendChild(liE1); 
     }
   }
-
   function renderChartResults(){
     var chartLabels = [];
     var chartDataClicks = [];
@@ -147,15 +160,15 @@ function renderList() {
       var stuffClicks = stuff[i].clicks;
       chartDataClicks.push(stuffClicks);
       var stuffViews = stuff[i].views;
-      chatDataViews.push(stuffViews);
-      
+      chatDataViews.push(stuffViews); 
     }
     var ctx = document.getElementById('myStuff').getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
           labels: chartLabels,
-          datasets: [{
+          datasets: [
+            {
             label: '# of Clicks',
             fillColor: "blue",
             data: chartDataClicks,
@@ -184,3 +197,4 @@ function renderList() {
         }
       });
     }
+     
