@@ -41,6 +41,10 @@ function Stuff(name) {
     this.clicks = 0;
     this.views = 0;
 }
+
+for (var i = 0; i < stuffImages.length; i++) {
+  new Stuff(stuffImages[i]);
+}
 var leftImageRandom;
 var midImageRandom;
 var rightImageRandom;
@@ -64,10 +68,6 @@ function pickRandomStuff() {
     rightImage.setAttribute('alt', rightImageRandom.name);  
     
 }
-
-for (var i = 0; i < stuffImages.length; i++) {
-    new Stuff(stuffImages[i]);
-}
 pickRandomStuff();
 leftImageRandom.views = 1;
 midImageRandom.views = 1;
@@ -81,9 +81,11 @@ function setItem(){
 }
 function getItem(){
       var imageOrder = localStorage.getItem('imageOrder');
-      stuff = JSON.parse(imageOrder);
-      renderList();
-      renderChartResults();
+      if(imageOrder){
+        stuff = JSON.parse(imageOrder);
+        renderList();
+        renderChartResults();
+      }
     }
 
 groupImageSection.addEventListener('click', clickImage)
@@ -137,7 +139,6 @@ function clickImage(e){
     }
     // console.log(rightImageRandom.views);
 }
-getItem();
 
 function renderList(){
 
@@ -197,4 +198,4 @@ function renderList(){
         }
       });
     }
-     
+    getItem();
